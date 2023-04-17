@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GrapheLAdj implements IGraphe {
+public class GrapheLAdj extends groupe {
 	private Map<String, List<Arc>> ladj;
 	
 	public GrapheLAdj() {
@@ -75,9 +75,32 @@ public class GrapheLAdj implements IGraphe {
 
 	@Override
     public void ajouterArc(String source, String destination, Integer valeur) {
-        ajouterSommet(source);
-        ajouterSommet(destination);
-        ladj.get(source).add(new Arc(source, destination, valeur));
+		try {
+		    // code that may throw the IllegalArgumentException
+			if ( valeur < 0) {
+				throw new IllegalArgumentException("valeur doit être positive");
+			}
+			else {
+
+		        ajouterSommet(source);
+		        ajouterSommet(destination);
+				// matrice prend la nouvel valeur de la source à la destination
+				try {
+				    // code that may throw the IllegalArgumentException
+
+					if(contientArc(source, destination)) {
+						throw new IllegalArgumentException("Arc existe déjà");
+					}
+					else {
+				        ladj.get(source).add(new Arc(source, destination, valeur));
+					}
+				} catch (IllegalArgumentException e) {
+				    throw e;
+				}
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
+		}
     }
 
 	@Override
@@ -99,18 +122,30 @@ public class GrapheLAdj implements IGraphe {
 	    
 	@Override
 	public void oterArc(String source, String destination) {
-	    List<Arc> arcsSortants = ladj.get(source);
-	    if (arcsSortants != null) {
-	        int index = -1;
-	        for (int i = 0; i < arcsSortants.size(); i++) {
-	            if (arcsSortants.get(i).getDestination().equals(destination)) {
-	                index = i;
-	                break;
-	            }
-	        }
-	        if (index != -1) {
-	            arcsSortants.remove(index);
-	        }
-	    }
+		
+		try {
+		    // code that may throw the IllegalArgumentException
+			if (!contientArc(source, destination)) {
+				throw new IllegalArgumentException(source + "n'as pas d'arc de " + destination);
+			}
+			else {
+				List<Arc> arcsSortants = ladj.get(source);
+			    if (arcsSortants != null) {
+			        int index = -1;
+			        for (int i = 0; i < arcsSortants.size(); i++) {
+			            if (arcsSortants.get(i).getDestination().equals(destination)) {
+			                index = i;
+			                break;
+			            }
+			        }
+			        if (index != -1) {
+			            arcsSortants.remove(index);
+			        }
+			    }
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
+		}
+	    
 	}
 }
