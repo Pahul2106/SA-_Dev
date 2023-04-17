@@ -3,22 +3,18 @@ package graphe;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GrapheLArcs implements IGraphe {
+public class GrapheLArcs extends groupe {
     private List<Arc> arcs;
 
     public GrapheLArcs() {
         arcs = new ArrayList<Arc>();
-    }
-
-    public GrapheLArcs(String str) {
-        this();
-        peupler(str);
+        System.out.println(getSommets());
     }
 
     @Override
     public void ajouterSommet(String noeud) {
         // rien à faire si le sommet est déjà présent
-        if (!getSommets().contains(noeud)) {
+        if (!contientSommet(noeud)) {
             // ajoute un arc factice vers le sommet vide
             arcs.add(new Arc(noeud, "", 0));
         }
@@ -27,12 +23,30 @@ public class GrapheLArcs implements IGraphe {
     @Override
     public void ajouterArc(String source, String destination, Integer valeur) {
         // vérifie que l'arc n'existe pas déjà
-        if (contientArc(source, destination)) {
-            throw new IllegalArgumentException("L'arc (" + source + "->" + destination + ") existe déjà.");
-        }
-        ajouterSommet(source);
-        ajouterSommet(destination);
-        arcs.add(new Arc(source, destination, valeur));
+    	try {
+		    // code that may throw the IllegalArgumentException
+			if (contientArc(source, destination)) {
+				throw new IllegalArgumentException("L'arc (" + source + "->" + destination + ") existe déjà.");
+			}
+			else {
+				ajouterSommet(source);
+		        ajouterSommet(destination);
+		        try {
+				    // code that may throw the IllegalArgumentException
+
+					if(contientArc(source, destination)) {
+						throw new IllegalArgumentException("Arc existe déjà");
+					}
+					else {
+						arcs.add(new Arc(source, destination, valeur));
+					}
+				} catch (IllegalArgumentException e) {
+				    throw e;
+				}
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
+		}        
     }
 
     @Override
@@ -50,10 +64,17 @@ public class GrapheLArcs implements IGraphe {
     @Override
     public void oterArc(String source, String destination) {
         // vérifie que l'arc existe
-        if (!contientArc(source, destination)) {
-            throw new IllegalArgumentException("L'arc (" + source + "->" + destination + ") n'existe pas.");
-        }
-        arcs.remove(new Arc(source, destination, 0));
+    	try {
+		    // code that may throw the IllegalArgumentException
+			if (contientArc(source, destination)) {
+				throw new IllegalArgumentException("L'arc (" + source + "->" + destination + ") n'existe pas.");
+			}
+			else {
+				arcs.remove(new Arc(source, destination, 0));
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
+		}
     }
 
     @Override
