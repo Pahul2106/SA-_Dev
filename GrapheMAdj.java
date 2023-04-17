@@ -1,7 +1,6 @@
 package graphe;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,7 @@ import java.util.Map;
 //private int[][] matrice;
 //private Map<String, Integer> indices;
 
-public class GrapheMAdj implements IGraphe {
+public class GrapheMAdj extends groupe {
 	private int[][] matrice;
 	private Map<String, Integer> indices;
 	
