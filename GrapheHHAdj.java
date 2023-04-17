@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class GrapheHHAdj implements IGraphe {
+public class GrapheHHAdj extends groupe {
 	private Map<String, Map<String, Integer>> hhadj;
 	private List<String> LisSom;
 	public GrapheHHAdj() {
