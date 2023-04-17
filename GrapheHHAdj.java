@@ -66,16 +66,34 @@ public class GrapheHHAdj implements IGraphe {
 	@Override
 	public void ajouterArc(String source, String destination, Integer valeur) {
 		// TODO Auto-generated method stub
-		if (valeur > 0) {
-			if (!contientArc(source, destination)) {
+		try {
+		    // code that may throw the IllegalArgumentException
+			if ( valeur < 0) {
+				throw new IllegalArgumentException("valeur doit être positive");
+			}
+			else {
 				if(!contientSommet(source)) {
 					ajouterSommet(source);
 				}
 				if(!contientSommet(destination)) {
 					ajouterSommet(destination);
 				}
-				hhadj.get(source).put(destination, valeur);
+				// matrice prend la nouvel valeur de la source à la destination
+				try {
+				    // code that may throw the IllegalArgumentException
+
+					if(contientArc(source, destination)) {
+						throw new IllegalArgumentException("Arc existe déjà");
+					}
+					else {
+						hhadj.get(source).put(destination, valeur);
+					}
+				} catch (IllegalArgumentException e) {
+				    throw e;
+				}
 			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
 		}
 	}
 
@@ -97,8 +115,16 @@ public class GrapheHHAdj implements IGraphe {
 	@Override
 	public void oterArc(String source, String destination) {
 		// TODO Auto-generated method stub
-		if (contientArc(source, destination)) {
-			hhadj.get(source).remove(destination);
+		try {
+		    // code that may throw the IllegalArgumentException
+			if (!contientArc(source, destination)) {
+				throw new IllegalArgumentException("valeur doit être positive");
+			}
+			else {
+				hhadj.get(source).remove(destination);				
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
 		}
 	}
 	
