@@ -8,7 +8,6 @@ public class GrapheLArcs extends groupe {
 
     public GrapheLArcs() {
         arcs = new ArrayList<Arc>();
-        System.out.println(getSommets());
     }
 
     @Override
