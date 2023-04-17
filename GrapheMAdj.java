@@ -1,6 +1,7 @@
 package graphe;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,12 +12,10 @@ import java.util.Map;
 public class GrapheMAdj implements IGraphe {
 	private int[][] matrice;
 	private Map<String, Integer> indices;
-	private List<String> SomList;
 	
 	public GrapheMAdj() {
 		indices = new HashMap<>();
 		matrice = new int[0][0];
-		SomList = new ArrayList<>();
 	}
 	@Override
 	public void ajouterSommet(String noeud) {
@@ -24,7 +23,6 @@ public class GrapheMAdj implements IGraphe {
 		// si noeud n'exite pas
 		if (!contientSommet(noeud)){
 			indices.put(noeud, indices.size());
-			SomList.add(noeud);
 			// définit les nouvelles relations du sommet
 			int[][] newMatrice = new int[matrice.length + 1][matrice.length + 1];
 			for (int i = 0; i < matrice.length; ++i) {
@@ -32,20 +30,43 @@ public class GrapheMAdj implements IGraphe {
 				newMatrice[i][matrice.length] = -1;
 				newMatrice[matrice.length][i] = -1;
 			}
+			newMatrice[matrice.length][matrice.length] = -1;
 			matrice = newMatrice;
 		}
 	}
 	@Override
 	public void ajouterArc(String source, String destination, Integer valeur) {
 		// TODO Auto-generated method stub
-		if (!contientSommet(source)) {
-			ajouterSommet(source);
+		try {
+		    // code that may throw the IllegalArgumentException
+			if ( valeur < 0) {
+				throw new IllegalArgumentException("valeur doit être positive");
+			}
+			else {
+				if (!contientSommet(source)) {
+					ajouterSommet(source);
+				}
+				if (!contientSommet(destination)) {
+					ajouterSommet(destination);
+				}
+				// matrice prend la nouvel valeur de la source à la destination
+				try {
+				    // code that may throw the IllegalArgumentException
+
+					if(contientArc(source, destination)) {
+						throw new IllegalArgumentException("Arc existe déjà");
+					}
+					else {
+						matrice[indices.get(source)][indices.get(destination)] = valeur;
+					}
+				} catch (IllegalArgumentException e) {
+				    throw e;
+				}
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
 		}
-		if (!contientSommet(destination)) {
-			ajouterSommet(destination);
-		}
-		// matrice prend la nouvel valeur de la source à la destination
-		matrice[indices.get(source)][indices.get(destination)] = valeur;
+		
 	}
 	@Override
 	public void oterSommet(String noeud) {
@@ -57,34 +78,52 @@ public class GrapheMAdj implements IGraphe {
 				oterArc(noeud, lis.get(i));
 			}
 			//suprime l'indices noeuds
-			SomList.remove(noeud);
 			indices.remove(noeud);
 		}
 	}
 	@Override
 	public void oterArc(String source, String destination) {
-		if (contientArc(source, destination)) {
-			matrice[indices.get(source)][indices.get(destination)] = -1;
+		try {
+		    // code that may throw the IllegalArgumentException
+			if (!contientArc(source, destination)) {
+				throw new IllegalArgumentException("n'existe pas");
+			}
+			else {
+				matrice[indices.get(source)][indices.get(destination)] = -1;
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
 		}
+		
 	}
 	@Override
 	public List<String> getSommets() {
 		// TODO Auto-generated method stub
-		return SomList;
+		List<String> sommets = new ArrayList<>();
+	    sommets.addAll(indices.keySet());
+	    return sommets;
 	}
 	@Override
 	public List<String> getSucc(String sommet) {
 		// TODO Auto-generated method stub
-		List<String> lis = new ArrayList<>();
-		if (contientSommet(sommet)) {
-			List<String> lis2 = getSommets();
-			for (int i = 0; i < indices.size(); ++i) {
-				if (contientArc(sommet, lis2.get(i))) {
-					lis.add(lis2.get(i));
-				}
+		try {
+		    // code that may throw the IllegalArgumentException
+			if (!contientSommet(sommet)) {
+				throw new IllegalArgumentException("sommet doit être exister");	
 			}
+			else {
+				List<String> lis = new ArrayList<>();
+				List<String> lis2 = getSommets();
+				for (int i = 0; i < indices.size(); ++i) {
+					if (contientArc(sommet, lis2.get(i))) {
+						lis.add(lis2.get(i));
+					}
+				}
+				return lis;
+			}
+		} catch (IllegalArgumentException e) {
+		    throw e;
 		}
-		return lis;
 	}
 	@Override
 	public int getValuation(String src, String dest) {
@@ -107,4 +146,5 @@ public class GrapheMAdj implements IGraphe {
 		}
 		return false;
 	}
+	
 }
