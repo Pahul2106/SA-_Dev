@@ -25,7 +25,8 @@ public class CheminATrouver {
         this.chemin_possible = chemin_possible;
     }
 
-    public String getFileName() {
+   
+	public String getFileName() {
         return fileName;
     }
 
