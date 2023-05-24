@@ -2,7 +2,7 @@
 
 Notre équipe : 
 - Charles CARTIER
-- Paul DOUYSSTE
+- Paul DOUYSSET
 - Rayan ZOUAOUI
 
 Groupe : 105
